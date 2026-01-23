@@ -11,13 +11,13 @@ This repo demonstrates an API wrapper around a matlab function. It works a bit l
  - The output of is formatted into json and returned to fastAPI, which in return returns it to the user of the API.
 
 
-# Matlab code
+## Matlab code
 
-# `mymagic.m`
+### `mymagic.m`
 
 Contains whatever model you have. In this case it's a function that takes an integer and returns a matrix.
 
-# `mymagic_cli.m`
+### `mymagic_cli.m`
 
 Wraps `mymagic` such that it takes json as input, and provides json as output as well. This allows the function
 to be called from the command line with a relatively flexible interface (json supports a lot, like
@@ -46,7 +46,7 @@ end
 ```
 
 
-# Compile the matlab function to a standalone application
+## Compile the matlab function to a standalone application
 
 that runs without a license.
 
@@ -67,7 +67,7 @@ Which should create an output file `out.json` with the following content:
 ```
 
 
-# Build and running the docker image
+## Build and run the docker image
 
 This builds a docker image, which automatically contains the matlab runtime too.
 
