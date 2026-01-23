@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: ./web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+    environment:
+      - AGREE_TO_MATLAB_RUNTIME_LICENSE=yes
+    restart: unless-stopped

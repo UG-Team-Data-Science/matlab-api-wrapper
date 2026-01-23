@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outFile": "../../built/local/tsc.js",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "jsx": "react",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+  },
+  "include": ["src/**/*", "declaration.d.ts"],
+  "exclude": ["**/*.spec.ts"]
+}

@@ -18,6 +18,7 @@ This repo demonstrates an API wrapper around a matlab function. It works a bit l
  - The accepted JSON is passed to matlab, and parsed into whatever inputs the `model` requires. In this case `x=5`.
  - The output of is formatted into json and returned to fastAPI, which in return returns it to the user of the API.
 
+The code for this API is located in `/api`. (`web` contains a website frontend).
 
 ## Matlab code
 
@@ -109,3 +110,7 @@ which outputs the output of `mymagic.m`:
     ],
 }
 ```
+
+
+# Website frontend
+
