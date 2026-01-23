@@ -1,5 +1,12 @@
 # Matlab API wrapper
 
+## TODO
+
+ [ ] Check if simulink works
+ [ ] Check if license really isn't needed
+
+## Overview
+
 This repo demonstrates an API wrapper around a matlab function. It works a bit like this:
 
  - You're on linux.
