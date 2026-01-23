@@ -3,7 +3,7 @@ import "./rug-huisstijl.css"
 
 import { MemoryRouter, Route, Routes} from "react-router-dom";
 
-import {MyMagicModel} from "./components/layout/MyMagicModel";
+import { MyMagicModel } from "./components/layout/MyMagicModel";
 import { Layout } from './components/layout/Layout';
 
 

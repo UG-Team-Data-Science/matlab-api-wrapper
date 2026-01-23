@@ -1,10 +1,15 @@
-# Matlab API wrapper
+This repo contains two components, the api and the website.
+
+The api wraps matlab into a REST API, and the website is a frontend for that API that exposes a webinterface and the raw API via nginx.
+
+
+# `api`: Matlab API wrapper
 
 ## TODO
 
  * [ ] Check if simulink works
  * [ ] Check if license really isn't needed
- * [ ] check if can be made faster, e.g. by keeping the matlab runtime up. Now it seems slow because every call starts the matlab runtime.
+ * [x] check if can be made faster, e.g. by keeping the matlab runtime up. Now it seems slow because every call starts the matlab runtime.
 
 ## Overview
 
@@ -54,46 +59,70 @@ function mymagic_cli(x_in, out_json)
 end
 ```
 
+There's a variation of this file, `mymagic_worker.m`, which keeps running in a loop and waits for input files to appear. This is useful if you want to keep the matlab runtime up, and avoid the overhead of starting it every API call, and makes the website MUCH faster.
 
-## Compile the matlab function to a standalone application
+## Compile the matlab worker to a standalone application
 
 that runs without a license.
 
 ```bash
-mcc -m mymagic_cli.m -a mymagic_cli.m -d build
+(cd api; mcc -m mymagic_worker.m -a mymagic.m -d build)
 ```
 
-If you wish, you can test the script in the `build`-folder. Please note the escaped quotes, e.g. '{\"x\": 5}', this is necessary because of how `run_mymagic_cli.sh` operates (little bug from the matlab compiler), but they won't be necessary for the API.
+If you wish, you can test the script in the `build`-folder, this will start the worker and it will run indefinetly (i.e. as a daemon):
 
 ```bash
-./build/run_mymagic_cli.sh '/usr/local/MATLAB/R2025b/' '{\"x\": 5}' out.json
+./api/build/run_mymagic_worker.sh '/usr/local/MATLAB/R2025b/' jobs
 ```
 
-Which should create an output file `out.json` with the following content:
+In a new terminal, run
+
+```bash
+echo '{"x": 4}' > jobs/some_job.in.json
+sleep 1
+cat jobs/some_job.out.json 
+```
+
+Assuming 1 second is enough for the worker to process the job, this will output:
 
 ```json
-[[17,24,1,8,15],[23,5,7,14,16],[4,6,13,20,22],[10,12,19,21,3],[11,18,25,2,9]]
+{"ok":true,"y":[[16,2,3,13],[5,11,10,8],[9,7,6,12],[4,14,15,1]]}
 ```
 
+Now stop the worker by running `touch jobs/__quit__` and optionally clean up the jobs folder with `rm -r jobs/`.
 
-## Build and run the docker image
+# The web-application
 
-This builds a docker image, which automatically contains the matlab runtime too.
+`web/webapp` Contains a website that presents a slider and automatically calls the API and shows the resulting magix matrix.
+
+![website](website.png)
+
+We'll deploy everything below:
+
+
+# Building everything (`docker compose`)
+
+`compose.yaml` contains all the building instructions, except for compiling the matlab worker, which needs to be done beforehand with the `mcc` command. That's on purpose, because building requires a license, and this way that needs to be done only once and can be commited to the repository.
+
+Build the containers using one of these commands, the latter gives a more verbose output allowing for easier debugging:
 
 ```bash
-docker build -t mymagic-api .
+docker compose build
+# Alternatively:
+# docker compose build --progress plain
+```
+Then start the containers, the optional `-d` starts them in the background.
+
+```bash
+docker compose up
+# Alterntively
+# docker compose up -d
 ```
 
-Running it then starts a small 'virtual machine' on your computer, a so called container:
+Now you can test the API:
 
 ```bash
-docker run -p 8000:8000 mymagic-api
-```
-
-After it starts, you can call the API with the following command:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"x": 5}' http://localhost:8000/mymagic | python3 -m json.tool
+curl -X POST -H "Content-Type: application/json" -d '{"x": 5}' http://localhost:8080/api/mymagic | python3 -m json.tool
 ```
 
 which outputs the output of `mymagic.m`:
@@ -111,6 +140,4 @@ which outputs the output of `mymagic.m`:
 }
 ```
 
-
-# Website frontend
-
+You can also test the website at [http://localhost:8080/](http://localhost:8080/) and use the webinterface as shown in the image above.

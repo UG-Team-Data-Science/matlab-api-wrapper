@@ -6494,7 +6494,6 @@ footer {
 @media (max-width: 899px) {
     .hide-sm { display: none; }
     .slash-bg {
-        width: 100px;
         background: linear-gradient(129deg, white, white 80px, rgba(220, 0, 45, 1) 80px);
     }
 }
@@ -6502,7 +6501,12 @@ footer {
 @media (min-width: 900px) {
     .show-sm { display: none; }
     .slash-bg {
-        width: 60px;
         background: linear-gradient(129deg, white, white 40px, rgba(220, 0, 45, 1) 40px);
     }
+}
+
+
+.white-red-bg {
+    height: 40px;
+    background: linear-gradient(90deg, white, white 50%, rgba(220, 0, 45, 1) 50%);
 }
