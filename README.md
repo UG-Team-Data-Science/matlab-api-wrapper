@@ -4,6 +4,7 @@
 
  * [ ] Check if simulink works
  * [ ] Check if license really isn't needed
+ * [ ] check if can be made faster, e.g. by keeping the matlab runtime up. Now it seems slow because every call starts the matlab runtime.
 
 ## Overview
 
