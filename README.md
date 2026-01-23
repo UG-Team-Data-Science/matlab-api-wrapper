@@ -2,8 +2,8 @@
 
 ## TODO
 
- [ ] Check if simulink works
- [ ] Check if license really isn't needed
+ * [ ] Check if simulink works
+ * [ ] Check if license really isn't needed
 
 ## Overview
 
